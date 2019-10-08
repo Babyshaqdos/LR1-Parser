@@ -11,7 +11,8 @@ public class LR1fixing {
 	Stack<String> stack = new Stack<String>();
 	String[] terms = {"n", "+", "-","*","/","(",")","$"};
 	String checkType;
-	String stacking ="";
+	String stacking ="[-:0]";
+	stack.push(stacking);
 	String holder;
 	int index;
 	public static void main(String[] args) {
@@ -41,7 +42,7 @@ public class LR1fixing {
 			}
 		}
 	}
-	
+
 	public void parseT(String checkType) {
 		switch(state) {
 		case 2:
@@ -56,9 +57,9 @@ public class LR1fixing {
 			stack.push(stacking);
 			System.out.println(stack + input.substring(index, input.length()));
 			state = 7;
-			
+
 		}
-		
+
 	}
 	public void parseF(String checkType) {
 		if(state == 5){
@@ -99,7 +100,7 @@ public class LR1fixing {
 			}
 		}
 	}
-	
+
 	public void readExpression() {
 		for(int i = 0; i<input.length(); i++) {
 			index = i+1;
@@ -113,20 +114,21 @@ public class LR1fixing {
 					System.out.println(stack + input.substring(index, input.length()));
 				}
 				else {
-					state = 5;
 					stacking += "[" + holder + ":" + state + "]";
 					stack.push(stacking);
 					System.out.println(stack + checkType +input.substring(index, input.length()));
 					parseF(holder);
+					holder = 0;
+					parseF(checkType);
 				}
 			}
 			else {
 				state = 5;
 				holder += checkType;
 			}
-		}	
+		}
 	}
-	
+
 	private boolean checkTerminal(String checkType) {
 		for(int i =0; i < terms.length; i++) {
 			if(checkType.contentEquals(terms[i])) {
@@ -135,5 +137,5 @@ public class LR1fixing {
 			}
 		return false;
 		}
-	
+
 }
