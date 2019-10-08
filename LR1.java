@@ -4,25 +4,29 @@ import java.util.Scanner;
 import java.util.Stack;
 
 public class LR1 {
+	Scanner scan = new Scanner(System.in);
+	String input = scan.nextLine();
 	String checkType;
+	int index;
+	String holder ="";
 	Stack stack = new Stack();
 	String[] terms = {"n", "+", "-","*","/","(",")","$"};
 	String stacking ="";
+	
 	private void parseE() {
-	if(stacking == "") {
-		if(checkType == "(") {
-			stacking += "[(:4]";
-			//System.out.println(stacking);
+		switch(checkType) {
+		case "(":
+			stacking = "[" + checkType + ": 4]";
+			System.out.println(stacking + input.substring(index--, index));
+		default:
+			for(int i =0; i<terms.length; i++) {
+				if(checkType.contentEquals(terms[i])) {
+					
+				}
+			}
+			stacking = "[" + checkType + ":5]";
+			System.out.println(stacking + input.substring(index--, index));
 		}
-		else {
-			stacking += "[" + checkType +":5]";
-			//System.out.println(stacking);
-			parseF();
-		}
-	}
-	else {
-		
-	}
 	}
 	
 	private void parseT() {
@@ -64,12 +68,8 @@ public class LR1 {
 		LR1 parser = new LR1();
 		parser.readExpression();
 	}
-	private void readExpression() {
-		Scanner keyboard= new Scanner(System.in);
-		String input = keyboard.nextLine();
+	public void readExpression() {
 		input += "$";
-		int index;
-		String holder = "";
 		for(int i=0; i<input.length();i++) {
 			index = i+1;
 			checkType = input.substring(i,index);
