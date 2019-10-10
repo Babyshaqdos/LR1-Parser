@@ -283,27 +283,38 @@ public class LR1numerodos {
 
 public void solveStack(Stack opStack) {
 	int value =0;
-	String bullshit = printStack.pop();
-		if(bullshit.contains("[F:10]")) {
-			String holding = opStack.pop().toString();
-			value = Integer.parseInt(holding);
-		}if(printStack.pop().contains("[*:7]")) {
-			String holding = operand.pop().toString();
+	for(int i =0; i <= operand.size(); i++) {
+		String opHolder = operand.pop().toString();
+		if(opHolder.contains("*")) {
+			String operand = opStack.pop().toString();
+			value = Integer.parseInt(operand);
+			String operand2 = opStack.pop().toString();
+			value *= Integer.parseInt(operand2);
+			opStack.push(value);
 		}
-		if(printStack.pop().contains("[T:9]")) {
-			String holding = opStack.pop().toString();
-			value *= Integer.parseInt(holding);
+		if(opHolder.contains("/")) {
+			String operand = opStack.pop().toString();
+			value = Integer.parseInt(operand);
+			String operand2 = opStack.pop().toString();
+			value /= Integer.parseInt(operand2);
+			opStack.push(value);
 		}
-		if(printStack.pop().contains("[+:6]")) {
-			String holding = operand.pop().toString();
+		if(opHolder.contains("+")) {
+			String operand = opStack.pop().toString();
+			value = Integer.parseInt(operand);
+			String operand2 = opStack.pop().toString();
+			value += Integer.parseInt(operand2);
+			opStack.push(value);
 		}
-		if(printStack.pop().contains("[E:1]")) {
-			String holding = opStack.pop().toString();
-			value += Integer.parseInt(holding);
+		if(opHolder.contains("-")) {
+			String operand = opStack.pop().toString();
+			value = Integer.parseInt(operand);
+			String operand2 = opStack.pop().toString();
+			value -= Integer.parseInt(operand2);
+			opStack.push(value);
 		}
-		if(value == 317) {
-			System.out.println("This is a valid expression, value is:" + value);
-		}
+	}
+	System.out.println("This is a valid expression, value is :" + value);
 	
 }
 }
