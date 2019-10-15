@@ -1,13 +1,21 @@
-package ilstu.edu;
+/*Nick Souligne
+ * nsoulig
+ * Assignment 2 IT 327
+ * Copyright Nick Souligne
+ * 
+ */
 
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Stack;
 
 public class LR1numerodos {
-	Scanner scan = new Scanner(System.in);
-	String input = scan.nextLine();
+	//Defining and declaring variables and stacks
 	String subString2;
 	String subString;
+	Object fml = "(";
+	String subString3;
 	int index;
 	String holder ="";
 	Stack<String> printStack = new Stack<String>();
@@ -18,15 +26,18 @@ public class LR1numerodos {
 	int state = 0;
 	String[] symbols = {"F", "E", "T"};
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		LR1numerodos LR1 = new LR1numerodos();
-		LR1.readExpression();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		String input = reader.readLine();
+		LR1.readExpression(input);
+
 
 	}
 
 	
-	
-	public void readExpression() {
+	//This method will take the user input and check it against the grammar rules
+	public void readExpression(String input) {
 		input += "$";
 		int index2;
 		for(int i=0; i<input.length();i++) {
@@ -36,6 +47,8 @@ public class LR1numerodos {
 			inputHold += " ";
 			subString = input.substring(i,index);
 			subString2 = inputHold.substring(index, index2);
+			subString3 = input.substring(index, input.length());
+
 			if(!checkTerminal(subString)) {
 				holder += subString;
 				if(checkTerminal(subString2)) {
@@ -44,7 +57,7 @@ public class LR1numerodos {
 						if(subString2.contains("$")) {
 							state = 10;
 							parseStack(holder, subString2);
-						}
+							}
 						else {
 						parseStack(holder, subString2);
 						}
@@ -64,13 +77,13 @@ public class LR1numerodos {
 					}
 					holder ="";
 					}
-				}
+			}
 			else {
 				parseStack(subString, subString2);
 			}
-			}
-		System.out.println(printStack);	
-		}	
+			}	
+	}	
+	//This method checks that the tokens of the input are terminal symbol or not
 	private boolean checkTerminal(String checkType) {
 		for(int i=0; i<terms.length; i++) {
 			if(checkType.contentEquals(terms[i])) {
@@ -79,13 +92,18 @@ public class LR1numerodos {
 		}
 		return false;
 	}
-	
+	//This method will set the stacks and change the state depending on the token that
+	//is passed in.
 	public void parseStack(String checkType, String subString2) {
 		switch(state) {
 		case 0:
-			if(checkType == "(") {
+			if(checkType.equals(fml)) {
 				state = 4;
 				opStack.push(checkType);
+				stacking = "[" + checkType + ":" + state + "]";
+				printStack.push(stacking);
+				System.out.println(printStack + subString3);
+				break;
 			}
 			else {
 				state = 5;
@@ -93,7 +111,7 @@ public class LR1numerodos {
 				stacking = "[" + checkType + ":" + state + "]";
 				printStack.push(stacking);
 				checkType = "F";
-				System.out.println(printStack);
+				System.out.println(printStack + subString3);
 				break;
 			}
 		case 1:
@@ -105,8 +123,13 @@ public class LR1numerodos {
 				operand.push(checkType);
 				stacking = "[" + checkType +":" + state + "]";
 				printStack.push(stacking);
-				System.out.println(printStack);
+				System.out.println(printStack + subString3);
+				if(checkTerminal(subString2)) {
+					state = 7;
+				}
+				else {
 				state =0;
+				}
 				break;
 			}
 		case 2:
@@ -124,7 +147,7 @@ public class LR1numerodos {
 				stacking = "[" + checkType + ":" + state + "]";
 				printStack.pop();
 				printStack.push(stacking);
-				System.out.println(printStack);
+				System.out.println(printStack + subString3);
 				break;
 			}
 		case 3:
@@ -134,7 +157,7 @@ public class LR1numerodos {
 				printStack.pop();
 				stacking = "[" + checkType + ":" + state + "]";
 				printStack.push(stacking);
-				System.out.println(printStack);
+				System.out.println(printStack + subString3);
 				break;
 			}
 			else {
@@ -143,7 +166,7 @@ public class LR1numerodos {
 				printStack.pop();
 				stacking = "[" + checkType + ":" + state + "]";
 				printStack.push(stacking);
-				System.out.println(printStack);
+				System.out.println(printStack + subString3);
 				break;
 			}
 		case 4:
@@ -175,6 +198,9 @@ public class LR1numerodos {
 			else {
 				state = 3;
 				checkType = "F";
+				stacking = "[" + checkType + ":" + state + "]";
+				printStack.push(stacking);
+				System.out.println(printStack + subString3);
 				break;
 			}	
 		case 5:
@@ -190,7 +216,7 @@ public class LR1numerodos {
 				stacking = "[" + checkType + ":" + state + "]";
 				printStack.pop();
 				printStack.push(stacking);
-				System.out.println(printStack);
+				System.out.println(printStack + subString3);
 				break;
 			}
 		case 6:
@@ -231,7 +257,7 @@ public class LR1numerodos {
 				stacking = "[" + checkType + ":" + state + "]";
 				printStack.push(stacking);
 				operand.push(checkType);
-				System.out.println(printStack);
+				System.out.println(printStack + subString3);
 				state = 0;
 				break;
 			}
@@ -262,7 +288,7 @@ public class LR1numerodos {
 				printStack.pop();
 				stacking = "[" + checkType + ":" + state + "]";
 				printStack.push(stacking);
-				System.out.println(printStack);
+				System.out.println(printStack + subString3);
 				break;
 			}
 		case 10:
@@ -270,17 +296,16 @@ public class LR1numerodos {
 			stacking = "[" + checkType +":"+state+"]";
 			printStack.pop();
 			printStack.push(stacking);
-			System.out.println(printStack);
+			System.out.println(printStack + subString3);
 			state = 11;
 			break;
 		case 11:
-			System.out.println(opStack);
 			solveStack(opStack);
 			break;
 		}
 	}
 
-
+//This method will solve the stack and print the value if the expression is valid
 public void solveStack(Stack opStack) {
 	int value =0;
 	for(int i =0; i <= operand.size(); i++) {
